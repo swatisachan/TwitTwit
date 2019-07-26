@@ -6,12 +6,20 @@ import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 public class GetTwitterTweets {
 
-	@Test
-	public void getTwitts() {
-		
-		Response resp=given().auth().oauth("PKgt2ZCsWp5KoAD9NhzoqwVBM", "AlEd1cin1vc2hd4Qun5MY09ZeeAeFtXqtPzXHVUrRwkbiZAIB9", "1153961818777219073-AgWT0mUkBbwMMaSe9NqLMyNYsrHDc0", "xgADYYSRzkAilFyGTMACTfAbe1I7lUR5GesBw67Y5eG4E")
+	@Test(description="getting timeline tweets")
+	public void getTwitts() throws IOException {
+		FileInputStream fis= new FileInputStream(new File("C:\\Users\\swati sachan\\git\\TwitTwit\\TwitterRestApi\\src\\test\\java\\sele1\\TwitterRestApi\\Credentials.properties"));
+		Properties prop= new Properties();
+		prop.load(fis);
+		Response resp=given().auth().oauth(prop.getProperty("ConsumerKey"), prop.getProperty("ConsumerSecret"), prop.getProperty("Token"), prop.getProperty("TokenScret"))
 		.when().get("https://api.twitter.com/1.1/statuses/home_timeline.json").then().extract().response();
 		System.out.println(resp.asString());
 	}
